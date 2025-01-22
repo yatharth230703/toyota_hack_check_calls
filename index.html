@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Call Now</title>
+  <title>Send SMS with Location</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -31,8 +31,8 @@
       margin-bottom: 20px;
     }
 
-    .call-button {
-      background-color: #EB0A1E; /* Toyota Red */
+    .sms-button {
+      background-color: #28A745; /* Green */
       color: #FFFFFF; /* White */
       font-size: 18px;
       padding: 10px 20px;
@@ -42,8 +42,8 @@
       transition: background-color 0.3s;
     }
 
-    .call-button:hover {
-      background-color: #FF4500; /* Slightly brighter red for hover */
+    .sms-button:hover {
+      background-color: #218838; /* Slightly darker green for hover */
     }
 
     .footer {
@@ -55,15 +55,36 @@
 </head>
 <body>
   <div class="container">
-    <div class="title">Need Help? Call Us Now!</div>
-    <button class="call-button" onclick="makeCall()">Call Now</button>
+    <div class="title">Send SMS with Your Location</div>
+    <button class="sms-button" onclick="sendLocation()">Send Location</button>
     <div class="footer">Powered by Your Web App</div>
   </div>
 
   <script>
-    function makeCall() {
-      window.location.href = "tel:+918882359577"; // Replace with your desired phone number
+    function sendLocation() {
+      // Check if Geolocation is supported
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Compose the SMS message
+            const message = `I am here: https://maps.google.com/?q=${latitude},${longitude}`;
+            const phoneNumber = "+1234567890"; // Replace with the desired number
+
+            // Use the SMS URI scheme to open the SMS app
+            window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
+          },
+          (error) => {
+            alert("Unable to retrieve your location. Please enable location services.");
+          }
+        );
+      } else {
+        alert("Geolocation is not supported by your browser.");
+      }
     }
   </script>
 </body>
 </html>
+
